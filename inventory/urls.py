@@ -1,10 +1,7 @@
-from django.urls import path, include
-from rest_framework.routers import DefaultRouter
-from .views import InventoryItemViewSet
-
-router = DefaultRouter()
-router.register(r'items', InventoryItemViewSet)
+from django.urls import path
+from .views import ItemListCreate, ItemDetailUpdateDelete
 
 urlpatterns = [
-    path('', include(router.urls)),
+    path('items/', ItemListCreate.as_view(), name='item-list-create'),
+    path('items/<int:pk>/', ItemDetailUpdateDelete.as_view(), name='item-detail-update-delete'),
 ]
