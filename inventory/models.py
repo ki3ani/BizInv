@@ -6,7 +6,7 @@ class Item(models.Model):
         ('electronics', 'Electronics'),
         ('clothing', 'Clothing'),
         ('books', 'Books'),
-        # Add more categories as needed
+        
     ]
     name = models.CharField(max_length=255)
     category = models.CharField(max_length=100, choices=CATEGORY_CHOICES, blank=True, null=True)

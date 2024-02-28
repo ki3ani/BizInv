@@ -1,3 +1,4 @@
+import os
 from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -132,3 +133,9 @@ MEDIA_ROOT = BASE_DIR / 'media'
 MEDIA_URL = '/media/'
 
 
+
+# Static files (CSS, JavaScript, images)
+STATIC_URL = '/static/'
+
+# Directory to collect static files into
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
