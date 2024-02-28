@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h2>Category Summary Report</h2>
+<table class="table">
+  <thead>
+    <tr>
+      <th>Category</th>
+      <th>Total Quantity</th>
+      <th>Total Value</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for category in category_summary %}
+    <tr>
+      <td>{{ category.category|title }}</td>
+      <td>{{ category.total_quantity }}</td>
+      <td>${{ category.total_value }}</td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+{% endblock %}

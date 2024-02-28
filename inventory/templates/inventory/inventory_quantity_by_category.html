@@ -1,0 +1,12 @@
+{% extends 'base.html' %}
+
+{% block title %}Inventory Quantity by Category{% endblock %}
+
+{% block content %}
+    <h2>Inventory Quantity by Category</h2>
+    <ul>
+        {% for category_data in categories %}
+            <li>{{ category_data.category }}: {{ category_data.total_quantity }}</li>
+        {% endfor %}
+    </ul>
+{% endblock %}

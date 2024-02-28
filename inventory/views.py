@@ -5,7 +5,8 @@ from django.urls import reverse_lazy
 from django.views.generic.edit import CreateView
 from .forms import ItemForm
 from django.db.models import Q
-
+from django.views.generic import TemplateView
+from django.db.models import Sum, F
 
 
 
@@ -74,3 +75,66 @@ class ItemDetailView(DetailView):
     model = Item
     context_object_name = 'item'
     template_name = 'inventory/item_detail.html'
+
+
+class InventoryValueByCategoryView(TemplateView):
+    template_name = 'inventory/inventory_value_by_category.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+
+        # Calculate total value of items in each category
+        category_values = Item.objects.values('category')\
+            .annotate(total_value=Sum(F('price')*F('quantity')))\
+            .order_by('category')
+
+        context['category_values'] = category_values
+        return context
+    
+
+
+class LowStockItemsView(ListView):
+    template_name = 'inventory/low_stock_items.html'
+    context_object_name = 'low_stock_items'
+
+    def get_queryset(self):
+        # Items with quantity less than a threshold (e.g., 5)
+        return Item.objects.filter(quantity__lt=5)
+    
+
+class MostValuableItemsView(ListView):
+    template_name = 'inventory/most_valuable_items.html'
+    context_object_name = 'most_valuable_items'
+
+    def get_queryset(self):
+        return Item.objects.annotate(total_value=F('price') * F('quantity')).order_by('-total_value')[:10]  # Top 10
+
+
+
+class CategorySummaryReportView(TemplateView):
+    template_name = 'inventory/category_summary.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+
+        category_summary = Item.objects.values('category')\
+            .annotate(total_quantity=Sum('quantity'), total_value=Sum(F('quantity') * F('price')))\
+            .order_by('category')
+
+        context['category_summary'] = category_summary
+        return context
+
+
+class ReportsView(TemplateView):
+    template_name = 'inventory/reports_page.html'
+
+
+
+class InventoryQuantityByCategoryView(TemplateView):
+    template_name = 'inventory/inventory_quantity_by_category.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        categories = Item.objects.values('category').annotate(total_quantity=Sum('quantity'))
+        context['categories'] = categories
+        return context

@@ -1,0 +1,10 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h2>Inventory Value by Category</h2>
+<ul>
+  {% for category_value in category_values %}
+  <li>{{ category_value.category|title }}: ${{ category_value.total_value }}</li>
+  {% endfor %}
+</ul>
+{% endblock %}

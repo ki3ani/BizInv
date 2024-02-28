@@ -1,0 +1,12 @@
+<!-- reports_page.html -->
+{% extends 'base.html' %}
+
+{% block content %}
+  <h2>Reports Dashboard</h2>
+  <ul>
+    <li><a href="{% url 'inventory_value_by_category' %}">Inventory Value by Category</a></li>
+    <li><a href="{% url 'inventory_quantity_by_category' %}">Inventory Quantity by Category</a></li>
+    <li><a href="{% url 'low_stock_items' %}">Low Stock Items</a></li>
+    <li><a href="{% url 'most_valuable_items' %}">Most Valuable Items</a></li>
+  </ul>
+{% endblock %}
