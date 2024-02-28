@@ -1,37 +1,47 @@
 {% extends 'base.html' %}
+{% load static %}
 
 {% block content %}
   <h2>Item List</h2>
-  <form method="get">
+  <form method="get" class="search-form">
     <input type="text" name="search" placeholder="Search items..." value="{{ request.GET.search }}" />
-    <button type="submit">Search</button>
+    <select name="category">
+      <option value="">All Categories</option>
+      {% for value, name in category_choices %}
+        <option value="{{ value }}" {% if request.GET.category == value %}selected{% endif %}>{{ name }}</option>
+      {% endfor %}
+    </select>
+    <input type="number" name="min_price" placeholder="Min price" value="{{ request.GET.min_price }}" />
+    <input type="number" name="max_price" placeholder="Max price" value="{{ request.GET.max_price }}" />
+    <button type="submit" class="btn btn-primary">Search</button>
   </form>
 
-  <div class="item-list">
+  <div class="item-grid">
     {% for item in items %}
       <div class="item">
+        {% if item.image %}
+          <img src="{{ item.image.url }}" alt="{{ item.name }}" style="max-width: 100%; height: auto; display: block;"/>
+        {% endif %}
         <h3>{{ item.name }}</h3>
         <p>{{ item.description }}</p>
-        <a href="{% url 'item_detail' pk=item.pk %}">View Details</a>
+        <a href="{% url 'item_detail' pk=item.pk %}" class="btn btn-info">View Details</a>
       </div>
     {% endfor %}
   </div>
 
   <div class="pagination">
-    <span class="step-links">
-        {% if items.has_previous %}
-            <a href="?page=1&{{ request.GET.urlencode }}">first</a>
-            <a href="?page={{ items.previous_page_number }}&{{ request.GET.urlencode }}">previous</a>
-        {% endif %}
-
-        <span class="current">
-            Page {{ items.number }} of {{ items.paginator.num_pages }}.
-        </span>
-
-        {% if items.has_next %}
-            <a href="?page={{ items.next_page_number }}&{{ request.GET.urlencode }}">next</a>
-            <a href="?page={{ items.paginator.num_pages }}&{{ request.GET.urlencode }}">last</a>
-        {% endif %}
-    </span>
+    {% if items.has_previous %}
+      <a href="?page=1{% for key, value in request.GET.items %}{% if key != 'page' %}&{{ key }}={{ value }}{% endif %}{% endfor %}" class="btn btn-outline-primary">First</a>
+      <a href="?page={{ items.previous_page_number }}{% for key, value in request.GET.items %}{% if key != 'page' %}&{{ key }}={{ value }}{% endif %}{% endfor %}" class="btn btn-outline-secondary">Previous</a>
+    {% endif %}
+    <span class="current">Page {{ items.number }} of {{ items.paginator.num_pages }}.</span>
+    {% if items.has_next %}
+      <a href="?page={{ items.next_page_number }}{% for key, value in request.GET.items %}{% if key != 'page' %}&{{ key }}={{ value }}{% endif %}{% endfor %}" class="btn btn-outline-secondary">Next</a>
+      <a href="?page={{ items.paginator.num_pages }}{% for key, value in request.GET.items %}{% if key != 'page' %}&{{ key }}={{ value }}{% endif %}{% endfor %}" class="btn btn-outline-primary">Last</a>
+    {% endif %}
   </div>
+{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/style.css' %}">
 {% endblock %}

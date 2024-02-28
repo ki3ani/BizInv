@@ -11,7 +11,7 @@ from django.db.models import Q
 
 
 def home(request):
-    return render(request, 'home.html')
+    return render(request, 'inventory/home.html')
 
 class ItemCreateView(CreateView):
     model = Item
@@ -39,6 +39,11 @@ class ItemListView(ListView):
     context_object_name = 'items'
     template_name = 'inventory/item_list.html'
     paginate_by = 10 
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['category_choices'] = Item.CATEGORY_CHOICES
+        return context
 
     def get_queryset(self):
         queryset = super().get_queryset()

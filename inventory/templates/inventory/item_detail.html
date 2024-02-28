@@ -3,13 +3,19 @@
 {% block title %}{{ item.name }}{% endblock %}
 
 {% block content %}
+  <div class="item-detail">
     <h1>{{ item.name }}</h1>
-    <p>Category: {{ item.category }}</p>
-    <p>Quantity: {{ item.quantity }}</p>
+    {% if item.category %}<p>Category: {{ item.category }}</p>{% endif %}
+    {% if item.quantity %}<p>Quantity: {{ item.quantity }}</p>{% endif %}
     <p>Price: ${{ item.price }}</p>
     <p>Description: {{ item.description }}</p>
     {% if item.image %}
-        <img src="{{ item.image.url }}" alt="{{ item.name }}">
+      <img src="{{ item.image.url }}" alt="{{ item.name }}" style="max-width: 500px; height: auto;">
     {% endif %}
-    <a href="{% url 'item_list' %}">Back to list</a>
+    <div class="actions">
+      <a href="{% url 'item_update' pk=item.pk %}" class="btn btn-primary">Update</a>
+      <a href="{% url 'item_delete' pk=item.pk %}" class="btn btn-danger">Delete</a>
+      <a href="{% url 'item_list' %}" class="btn btn-secondary">Back to list</a>
+    </div>
+  </div>
 {% endblock %}
