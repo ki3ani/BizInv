@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Inventory Management System{% endblock %}</title>
+    {% block extra_head %}{% endblock %}
+    <link rel="stylesheet" href="{% static 'css/style.css' %}"> <!-- Ensure you have this CSS file in your static directory -->
+</head>
+<body>
+    <header>
+        <nav>
+            <ul>
+                <li><a href="{% url 'item_list' %}">Home</a></li>
+                <!-- Add more navigation links as needed -->
+            </ul>
+        </nav>
+    </header>
+    
+    <main>
+        {% block content %}{% endblock %}
+    </main>
+    
+    <footer>
+        <p>&copy; 2024 Inventory Management System</p>
+    </footer>
+    
+    {% block extra_js %}{% endblock %}
+</body>
+</html>
