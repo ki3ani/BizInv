@@ -7,6 +7,7 @@ from .forms import ItemForm
 from django.db.models import Q
 from django.views.generic import TemplateView
 from django.db.models import Sum, F
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 
 
 
@@ -39,11 +40,26 @@ class ItemListView(ListView):
     model = Item
     context_object_name = 'items'
     template_name = 'inventory/item_list.html'
-    paginate_by = 10 
+    paginate_by = 10
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['category_choices'] = Item.CATEGORY_CHOICES
+
+        # Manual pagination
+        items = self.get_queryset()
+        paginator = Paginator(items, self.paginate_by)
+        page = self.request.GET.get('page')
+        try:
+            items = paginator.page(page)
+        except PageNotAnInteger:
+            # If page is not an integer, deliver first page.
+            items = paginator.page(1)
+        except EmptyPage:
+            # If page is out of range (e.g. 9999), deliver last page of results.
+            items = paginator.page(paginator.num_pages)
+
+        context['items'] = items
         return context
 
     def get_queryset(self):

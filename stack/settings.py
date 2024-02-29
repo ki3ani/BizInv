@@ -29,7 +29,8 @@ INSTALLED_APPS = [
     'inventory.apps.InventoryConfig',
     'rest_framework',
     'corsheaders',
-    'django_filters'
+    'django_filters',
+    'bootstrap_pagination',
 ]
 
 MIDDLEWARE = [

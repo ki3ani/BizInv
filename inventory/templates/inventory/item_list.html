@@ -29,17 +29,21 @@
     {% endfor %}
   </div>
 
-  <div class="pagination">
-    {% if items.has_previous %}
-      <a href="?page=1{% for key, value in request.GET.items %}{% if key != 'page' %}&{{ key }}={{ value }}{% endif %}{% endfor %}" class="btn btn-outline-primary">First</a>
-      <a href="?page={{ items.previous_page_number }}{% for key, value in request.GET.items %}{% if key != 'page' %}&{{ key }}={{ value }}{% endif %}{% endfor %}" class="btn btn-outline-secondary">Previous</a>
-    {% endif %}
-    <span class="current">Page {{ items.number }} of {{ items.paginator.num_pages }}.</span>
-    {% if items.has_next %}
-      <a href="?page={{ items.next_page_number }}{% for key, value in request.GET.items %}{% if key != 'page' %}&{{ key }}={{ value }}{% endif %}{% endfor %}" class="btn btn-outline-secondary">Next</a>
-      <a href="?page={{ items.paginator.num_pages }}{% for key, value in request.GET.items %}{% if key != 'page' %}&{{ key }}={{ value }}{% endif %}{% endfor %}" class="btn btn-outline-primary">Last</a>
-    {% endif %}
-  </div>
+  {% if items.has_other_pages %}
+    <ul class="pagination">
+      {% if items.has_previous %}
+        <li class="page-item"><a class="page-link" href="?page=1{% if request.GET.search %}&search={{ request.GET.search }}{% endif %}{% if request.GET.category %}&category={{ request.GET.category }}{% endif %}{% if request.GET.min_price %}&min_price={{ request.GET.min_price }}{% endif %}{% if request.GET.max_price %}&max_price={{ request.GET.max_price }}{% endif %}">First</a></li>
+        <li class="page-item"><a class="page-link" href="?page={{ items.previous_page_number }}{% if request.GET.search %}&search={{ request.GET.search }}{% endif %}{% if request.GET.category %}&category={{ request.GET.category }}{% endif %}{% if request.GET.min_price %}&min_price={{ request.GET.min_price }}{% endif %}{% if request.GET.max_price %}&max_price={{ request.GET.max_price }}{% endif %}">Previous</a></li>
+      {% endif %}
+      
+      <li class="page-item active"><span class="page-link">{{ items.number }}</span></li>
+      
+      {% if items.has_next %}
+        <li class="page-item"><a class="page-link" href="?page={{ items.next_page_number }}{% if request.GET.search %}&search={{ request.GET.search }}{% endif %}{% if request.GET.category %}&category={{ request.GET.category }}{% endif %}{% if request.GET.min_price %}&min_price={{ request.GET.min_price }}{% endif %}{% if request.GET.max_price %}&max_price={{ request.GET.max_price }}{% endif %}">Next</a></li>
+        <li class="page-item"><a class="page-link" href="?page={{ items.paginator.num_pages }}{% if request.GET.search %}&search={{ request.GET.search }}{% endif %}{% if request.GET.category %}&category={{ request.GET.category }}{% endif %}{% if request.GET.min_price %}&min_price={{ request.GET.min_price }}{% endif %}{% if request.GET.max_price %}&max_price={{ request.GET.max_price }}{% endif %}">Last</a></li>
+      {% endif %}
+    </ul>
+  {% endif %}
 {% endblock %}
 
 {% block extra_css %}
